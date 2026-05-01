@@ -1,34 +1,57 @@
 <template>
-  <LanguageSwitcher />
-
   <nav class="nav">
     <div class="nav__inner">
       <RouterLink class="brand" to="/">
-        <img class="brand__mark" :src="smallLogo" alt="PuntoSabor" />
+        <img class="brand__mark" :src="smallLogo" alt="PointFlavor" />
       </RouterLink>
 
-      <div class="nav__menu">
-        <RouterLink to="/categories">{{ $t('nav.categories') }}</RouterLink>
+      <button
+        class="nav__toggle"
+        type="button"
+        aria-label="Abrir menu"
+        :aria-expanded="menuOpen ? 'true' : 'false'"
+        aria-controls="main-menu"
+        @click="toggleMenu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div id="main-menu" :class="['nav__menu', menuOpen && 'nav__menu--open']">
+        <RouterLink to="/">{{ $t('nav.home') }}</RouterLink>
+        <RouterLink to="/map">{{ $t('nav.explore') }}</RouterLink>
         <RouterLink to="/promos">{{ $t('nav.promos') }}</RouterLink>
         <RouterLink to="/plans">{{ $t('nav.plans') }}</RouterLink>
         <RouterLink to="/contact">{{ $t('nav.contact') }}</RouterLink>
-        <RouterLink to="/map">{{ $t('nav.map') }}</RouterLink>
 
-        <template v-if="!isLoggedIn">
-          <RouterLink class="btn" to="/auth">{{ $t('nav.signin') }}</RouterLink>
-        </template>
+        <div class="nav__actions">
+          <LanguageSwitcher inline />
+          <template v-if="!isLoggedIn">
+            <RouterLink class="btn" to="/auth" @click="closeAllMenus">{{ $t('nav.signin') }}</RouterLink>
+          </template>
 
-        <template v-else>
-          <RouterLink to="/favorites">{{ $t('nav.favorites') }}</RouterLink>
-          <RouterLink to="/preferences">{{ $t('nav.preferences') }}</RouterLink>
-          <RouterLink to="/profile">{{ $t('nav.profile') }}</RouterLink>
+          <template v-else>
+            <div class="user-menu" @click.stop>
+              <button
+                class="user-menu__toggle"
+                type="button"
+                :aria-expanded="userMenuOpen ? 'true' : 'false'"
+                @click="toggleUserMenu"
+              >
+                <span class="user-avatar" aria-hidden="true">{{ userInitials }}</span>
+                <span class="user-name">{{ userName }}</span>
+              </button>
 
-          <span class="user-label" :title="userName" aria-label="Sesión iniciada">
-            <span class="user-avatar" aria-hidden="true">{{ userInitials }}</span>
-            <span class="user-name">{{ userName }}</span>
-          </span>
-          <button class="btn btn--logout" @click="logout">Salir</button>
-        </template>
+              <div v-if="userMenuOpen" class="user-menu__panel">
+                <RouterLink to="/favorites" @click="closeAllMenus">{{ $t('nav.favorites') }}</RouterLink>
+                <RouterLink to="/preferences" @click="closeAllMenus">{{ $t('nav.preferences') }}</RouterLink>
+                <RouterLink to="/profile" @click="closeAllMenus">{{ $t('nav.profile') }}</RouterLink>
+                <button class="btn btn--logout" @click="logout">Salir</button>
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </nav>
@@ -38,7 +61,7 @@
   <footer class="footer">
     <div class="wrap">
       <RouterLink class="brand" to="/" style="color:#fff">
-        <img class="brand__mark brand__mark--footer" :src="smallLogo" alt="PuntoSabor" />
+        <img class="brand__mark brand__mark--footer" :src="smallLogo" alt="PointFlavor" />
       </RouterLink>
       <small>© 2025 FijasDev</small>
     </div>
@@ -53,7 +76,7 @@ import LanguageSwitcher from '@/shared/presentations/components/language-switche
 export default {
   name: 'App',
   components: { LanguageSwitcher },
-  data: () => ({ smallLogo, session: null, loading: true }),
+  data: () => ({ smallLogo, session: null, loading: true, menuOpen: false, userMenuOpen: false }),
   computed: {
     isLoggedIn() {
       return this.session && this.session.id;
@@ -82,6 +105,7 @@ export default {
 
     const unlisten = this.$router.afterEach(() => {
       setTimeout(() => this.loadSession(), 50);
+      this.closeAllMenus();
     });
 
     this._removeAfterEach = unlisten;
@@ -92,6 +116,18 @@ export default {
     if (typeof this._removeAfterEach === 'function') this._removeAfterEach();
   },
   methods: {
+    toggleMenu() {
+      this.menuOpen = !this.menuOpen;
+      if (this.menuOpen) this.userMenuOpen = false;
+    },
+    toggleUserMenu() {
+      this.userMenuOpen = !this.userMenuOpen;
+      if (this.userMenuOpen) this.menuOpen = false;
+    },
+    closeAllMenus() {
+      this.menuOpen = false;
+      this.userMenuOpen = false;
+    },
     loadSession() {
       const stored = getSession();
       this.session = stored;
@@ -100,6 +136,7 @@ export default {
     logout() {
       clearSession();
       this.session = null;
+      this.closeAllMenus();
       this.$router.push('/');
     }
   }

@@ -26,9 +26,9 @@
       <!-- Logo -->
       <div class="pinwrap">
         <div class="pin pin--img">
-          <img :src="smallLogo" alt="PuntoSabor" />
+          <img class="hero-logo" :src="smallLogo" alt="PointFlavor" />
         </div>
-        <h2 class="hero__brand">PuntoSabor</h2>
+        <h2 class="hero__brand">{{ $t('brand') }}</h2>
       </div>
     </div>
   </section>
@@ -66,7 +66,8 @@ import smallLogo from '@/assets/slogoPuntoSabor.png';
 
 const modules = import.meta.glob('/src/assets/*.{png,jpg,jpeg,webp}', {
   eager: true,
-  as: 'url'
+  query: '?url',
+  import: 'default'
 });
 
 const IMG_MAP = Object.fromEntries(

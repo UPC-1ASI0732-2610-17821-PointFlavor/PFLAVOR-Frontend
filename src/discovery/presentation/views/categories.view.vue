@@ -46,7 +46,8 @@ import { listCategoriesQuery } from '../../application/list-categories.query.js'
 
 const modules = import.meta.glob('/src/assets/*.{png,jpg,jpeg,webp}', {
   eager: true,
-  as: 'url'
+  query: '?url',
+  import: 'default'
 });
 
 const IMG_MAP = Object.fromEntries(

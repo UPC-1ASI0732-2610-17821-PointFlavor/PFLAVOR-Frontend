@@ -1,6 +1,9 @@
 {
-  "brand": "PuntoSabor",
+  "brand": "PointFlavor",
   "nav": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "language": "Idioma",
     "categories": "Categorías",
     "promos": "Promos",
     "plans": "Planes",
@@ -282,7 +285,7 @@
     "nameLabel": "Nombre",
     "namePh": "Tu nombre",
     "emailLabel": "Correo",
-    "emailPh": "tu@email.com",
+    "emailPh": "tu (at) email.com",
     "messageLabel": "Mensaje",
     "messagePh": "Cuéntanos cómo podemos ayudarte…",
     "submit": "Enviar",
@@ -346,7 +349,7 @@
   "passwordRecovery": {
     "title": "Recuperar Contraseña",
     "emailLabel": "Correo Electrónico",
-    "emailPlaceholder": "tu@email.com",
+    "emailPlaceholder": "tu (at) email.com",
     "submit": "Enviar Instrucciones",
     "submitting": "Enviando…",
     "successTitle": "¡Correo enviado!",

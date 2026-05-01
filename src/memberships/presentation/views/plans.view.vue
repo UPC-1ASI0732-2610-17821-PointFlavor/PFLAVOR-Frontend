@@ -33,7 +33,7 @@ function formatPrice(n) {
 const plans = computed(() => {
   const P = tm('plans') || {}
   const get = (id, key, fb = '') => (P?.[id]?.[key] ?? fb)
-  const ids = ['premium', 'basic', 'exclusive']
+  const ids = ['basic', 'premium', 'exclusive']
   return ids.map(id => {
     const priceNum = priceById.value.get(id)
     const priceText = (typeof priceNum === 'number')
@@ -47,13 +47,12 @@ const plans = computed(() => {
       cta: get(id, 'button', t('home.view') || 'Elegir'),
       tagline: get(id, 'tagline', ''),
       features: Array.isArray(get(id, 'features')) ? get(id, 'features') : [],
-      popular: id === 'basic',
+      popular: id === 'premium',
       popularText: P?.basic?.popular || 'Popular'
     }
   })
 })
 
-const displayPrice = (p) => p.period ? `${p.priceText} ${p.period}` : p.priceText
 const router = useRouter()
 
 function goToPayment(planKey) {
@@ -63,15 +62,10 @@ function goToPayment(planKey) {
 
 <template>
   <section class="wrap plans-page">
-    <span class="section-kicker">{{ $t('plans.title') }}</span>
-    <h1 class="section-title">{{ $t('plans.title') }}</h1>
-    <p class="section-lead">{{ $t('plans.subtitle') }}</p>
-
-    <div class="common-benefits">
-      <span class="benefit">{{ $t('plans.common.noCommitment') }}</span>
-      <span class="benefit">{{ $t('plans.common.securePayments') }}</span>
-      <span class="benefit">{{ $t('plans.common.support') }}</span>
-    </div>
+    <header class="plans-hero">
+      <h1 class="section-title">{{ $t('plans.title') }}</h1>
+      <p class="section-lead">{{ $t('plans.subtitle') }}</p>
+    </header>
 
     <div class="plans-grid">
       <article
@@ -81,36 +75,31 @@ function goToPayment(planKey) {
           :class="{ '--popular': p.popular }"
       >
         <header class="plan-head">
-          <h3 class="plan-name">{{ p.name }}</h3>
+          <div class="plan-title">
+            <h3 class="plan-name">{{ p.name }}</h3>
+            <span v-if="p.popular" class="plan-badge">{{ p.popularText }}</span>
+          </div>
           <div class="price">
-            <span class="price-main">{{ displayPrice(p) }}</span>
+            <span class="price-main">{{ p.priceText }}</span>
+            <span v-if="p.period" class="price-period">{{ p.period }}</span>
           </div>
-          <div v-if="p.popular" class="ribbon">
-            <span>{{ p.popularText }}</span>
-          </div>
+          <p class="plan-summary" v-if="p.tagline">{{ p.tagline }}</p>
         </header>
 
-        <ul class="features" v-if="p.features?.length">
-          <li v-for="(f, i) in p.features" :key="i">
-            <span class="dot"></span>
-            <span>{{ f }}</span>
-          </li>
-        </ul>
+        <div class="features" v-if="p.features?.length">
+          <span v-for="(f, i) in p.features" :key="i" class="feature-pill">{{ f }}</span>
+        </div>
 
         <footer class="plan-cta">
           <button class="btn cta" @click="goToPayment(p.key)">{{ p.cta }}</button>
-          <p class="tagline" v-if="p.tagline">{{ p.tagline }}</p>
         </footer>
       </article>
     </div>
 
-    <div style="text-align:center; margin-top: 28px;">
-      <p class="meta">
-        {{ $t('plans.ctaHelp') }}
-        <RouterLink to="/contact" style="color: var(--orange); font-weight: 700; text-decoration: none;">
-          {{ $t('plans.ctaContact') }}
-        </RouterLink>
-      </p>
+    <div class="plans-footer">
+      <RouterLink to="/contact" class="plans-footer__link">
+        {{ $t('plans.ctaContact') }}
+      </RouterLink>
     </div>
   </section>
 </template>

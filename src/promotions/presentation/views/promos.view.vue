@@ -162,7 +162,11 @@ import { createPromotionUseCase } from '@/promotions/application/create-promotio
 import { PromotionsRepository } from '@/promotions/infrastructure/promos.repository.js';
 import { DiscoveryRepository } from '@/discovery/infrastructure/discovery.repository.js';
 
-const modules = import.meta.glob('/src/assets/*.{png,jpg,jpeg,webp}', { eager: true, as: 'url' });
+const modules = import.meta.glob('/src/assets/*.{png,jpg,jpeg,webp}', {
+  eager: true,
+  query: '?url',
+  import: 'default'
+});
 const IMG_MAP = Object.fromEntries(
     Object.entries(modules).map(([path, url]) => {
       const filename = path.split('/').pop().toLowerCase().replace(/\.[^.]+$/, '');

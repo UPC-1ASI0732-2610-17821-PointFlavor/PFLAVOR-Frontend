@@ -42,7 +42,7 @@ export function setupGlobalServices(app, router) {
 export const APP_CONFIG = {
 
     API_URL: import.meta.env.VITE_API_URL || 'http://localhost:3001',
-    APP_NAME: 'PuntoSabor',
+    APP_NAME: 'PointFlavor',
 
 
     REQUEST_TIMEOUT: 30000,

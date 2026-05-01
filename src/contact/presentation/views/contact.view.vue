@@ -195,9 +195,9 @@ onMounted(() => {
     className: 'ps-marker'
   })
 
-  L.marker(center, { icon: psIcon })
+    L.marker(center, { icon: psIcon })
       .addTo(map)
-      .bindPopup('<b>PuntoSabor</b><br>Av. Sabor 123, Lima')
+      .bindPopup('<b>PointFlavor</b><br>Av. Sabor 123, Lima')
       .openPopup()
 
   setTimeout(() => map.invalidateSize(), 250)

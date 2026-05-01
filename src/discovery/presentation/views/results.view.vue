@@ -24,7 +24,8 @@ import HuariqueCard from '../components/huarique-card.vue';
 
 const modules = import.meta.glob('/src/assets/*.{png,jpg,jpeg,webp}', {
   eager: true,
-  as: 'url'
+  query: '?url',
+  import: 'default'
 });
 
 const IMG_MAP = Object.fromEntries(

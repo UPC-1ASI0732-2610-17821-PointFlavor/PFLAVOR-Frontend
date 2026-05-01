@@ -15,7 +15,7 @@ import reportsRoutes from './reports/presentation/reports-routes.js';
 
 const routes = [
 
-    { path: '/', name: 'home', component: Home, meta: { title: 'PuntoSabor' } },
+    { path: '/', name: 'home', component: Home, meta: { title: 'PointFlavor' } },
 
     ...authRoutes,
     ...discoveryRoutes,
@@ -64,7 +64,7 @@ router.beforeEach(async (to) => {
 });
 
 router.afterEach((to) => {
-    const base = 'PuntoSabor';
+    const base = 'PointFlavor';
     const title = to.meta?.title ? `${to.meta.title} · ${base}` : base;
     if (typeof document !== 'undefined') document.title = title;
 });

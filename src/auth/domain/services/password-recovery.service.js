@@ -59,7 +59,7 @@ export class PasswordRecoveryService {
 
         return {
             to: email,
-            subject: 'Recupera tu contraseña - PuntoSabor',
+            subject: 'Recupera tu contraseña - PointFlavor',
             template: 'password-recovery',
             data: {
                 email,
